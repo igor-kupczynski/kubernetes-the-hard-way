@@ -1,0 +1,5 @@
+// Prefix which will be used on all the resrouce names
+prefix  = "learning"
+
+// ID of the GCP project
+project = "my-project-123"

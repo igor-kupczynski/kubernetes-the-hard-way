@@ -1,3 +1,6 @@
 !*.sublime-project
 .terraform.lock.hcl
 .terraform/providers
+terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
