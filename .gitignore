@@ -1,4 +1,7 @@
 !*.sublime-project
+
+Brewfile.lock.json
+
 .terraform.lock.hcl
 .terraform/providers
 terraform.tfvars
