@@ -26,6 +26,8 @@ gcloud config set compute/zone us-west1-c
 ## Setup resources
 
 Configure:
+- Create a new project in your google cloud console
+- Setup it's name:
 ```sh
 cp terraform.tfvars.example terraform.tfvars
 vim terraform.tfvars
@@ -33,7 +35,7 @@ vim terraform.tfvars
 
 Spin up:
 ```sh
-terraform apply
+make apply
 ```
 
 Connect to the node:
@@ -43,6 +45,6 @@ gcloud compute ssh igor-learn-k8s-controller-0
 
 Spin down:
 ```sh
-terraform destroy
+make clean
 ```
 
