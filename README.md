@@ -1,6 +1,6 @@
 # Kubernetes the Hard Way
 
-Terraform resrouces to play with Kelsey Hightower's [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
+Scripts and resrouces to play with Kelsey Hightower's [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
 ## Install required dependencies on macOS
 
@@ -29,22 +29,25 @@ Configure:
 - Create a new project in your google cloud console
 - Setup it's name:
 ```sh
-cp terraform.tfvars.example terraform.tfvars
-vim terraform.tfvars
+$ cd 1-infra
+1-infra$ cp terraform.tfvars.example terraform.tfvars
+1-infra$ vim terraform.tfvars
 ```
 
 Spin up:
 ```sh
-make apply
+# In the root directory
+$ make apply
 ```
 
 Connect to the node:
 ```sh
-gcloud compute ssh igor-learn-k8s-controller-0
+$ gcloud compute ssh igor-learn-k8s-controller-0
 ```
 
 Spin down:
 ```sh
-make clean
+# In the root directory
+$ make clean
 ```
 
