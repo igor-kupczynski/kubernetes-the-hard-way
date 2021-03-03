@@ -2,7 +2,7 @@
 brew "tfenv"
 
 # Hashicorp terraform LSP server 
-brew "hashicorp/tap/terraform-ls"
+brew "hashicorp/tap/terraform-ls", link: true
 
 # Cloudflare PKI tools
 brew "cfssl"
