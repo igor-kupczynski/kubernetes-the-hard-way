@@ -5,18 +5,36 @@ COMPONENTS = \
 	admin.pem \
 	kube-controller-manager.pem \
 	kube-proxy.pem \
-	kube-scheduler.pem \
-	service-account.pem \
-	kubernetes-key.pem
+	kube-scheduler.pem
+CONTROLLERS = kubernetes.pem service-account.pem
 WORKERS = worker-0.pem worker-1.pem worker-2.pem
 
 .PHONY: all
-all: $(CA) $(COMPONENTS) $(WORKERS)
+all: $(COMPONENTS) upload-worker-keys upload-controller-keys
 
 .PHONY: clean
 clean:
 	@ rm -f *.csr
 	@ rm -f *.pem
+
+
+.PHONY: upload-controller-keys
+upload-controller-keys: upload-controller-keys-0 upload-controller-keys-1 upload-controller-keys-2
+
+.PHONY: upload-controller-keys-%
+upload-controller-keys-%: $(CONTROLLERS)
+	@ INSTANCE='controller-$*' ;\
+		gcloud compute scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
+    service-account-key.pem service-account.pem ${PREFIX}-$${INSTANCE}:~/
+
+.PHONY: upload-worker-keys
+upload-worker-keys: upload-worker-keys-0 upload-worker-keys-1 upload-worker-keys-2
+
+.PHONY: upload-worker-keys-%
+upload-worker-keys-%: $(WORKERS)
+	@ INSTANCE='worker-$*' ;\
+		gcloud compute scp ca.pem $${INSTANCE}-key.pem $${INSTANCE}.pem ${PREFIX}-$${INSTANCE}:~/
+
 
 ca-key.pem: ca-config.json ca-csr.json
 	@ cfssl gencert -initca ca-csr.json | cfssljson -bare ca
@@ -80,14 +98,14 @@ worker-%-key.pem: $(CA) worker-%-csr.json
 		  -profile=kubernetes \
 		  $${WORKER}-csr.json | cfssljson -bare $${WORKER}
 worker-0.pem: worker-0-key.pem
-worker-1.pem: worker-2-key.pem
+worker-1.pem: worker-1-key.pem
 worker-2.pem: worker-2-key.pem
 
 
 kubernetes-key.pem: $(CA) kubernetes-csr.json
 	@ REGION=$$(gcloud config get-value compute/region) ;\
 		KUBERNETES_PUBLIC_ADDRESS=$$(gcloud compute addresses describe ${PREFIX}-kubernetes-the-hard-way --region $${REGION} --format 'value(address)') ;\
-		KUBERNETES_HOSTNAMES='kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local' ;\
+		KUBERNETES_HOSTNAMES="kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local" ;\
 		cfssl gencert \
 		  -ca=ca.pem \
 		  -ca-key=ca-key.pem \
