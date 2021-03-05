@@ -82,3 +82,4 @@ $ make clean
 My version of the labs (slightly changed versions, etc.):
 
 - [Bootstrapping the etcd Cluster](./7-etcd.sh)
+- [Bootstrapping the Kubernetes Control Plane](./8-control-plane.sh)
