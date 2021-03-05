@@ -15,3 +15,11 @@ infra:
 .PHONY: pki
 pki: infra
 	$(MAKE) -C 2-config
+
+.PHONY: ssh-controller-%
+ssh-controller-%:
+	@ gcloud compute ssh ${PREFIX}-controller-$*
+
+.PHONY: ssh-worker-%
+ssh-worker-%:
+	@ gcloud compute ssh ${PREFIX}-worker-$*

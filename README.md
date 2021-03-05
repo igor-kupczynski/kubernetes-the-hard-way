@@ -1,14 +1,29 @@
 # Kubernetes the Hard Way
 
-Scripts and resrouces to play with Kelsey Hightower's [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
+Scripts and resources to play with Kelsey Hightower's [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
-## Install required dependencies on macOS
+Running the Makefile will get you through to the step 06:
+```
+01-prerequisites.md
+02-client-tools.md
+03-compute-resources.md
+04-certificate-authority.md
+05-kubernetes-configuration-files.md
+06-data-encryption-keys.md
+```
+
+TODO:
+- [ ] Replace the elaborate `2-config/Makefile` with ansible
+
+## Prerequisites
+
+### Install required dependencies on macOS
 
 ```sh
 brew bundle
 ```
 
-## Authenticate with Google Cloud
+### Authenticate with Google Cloud
 
 Install Google Cloud SDK https://cloud.google.com/sdk/docs/quickstart
 
@@ -23,7 +38,7 @@ gcloud config set compute/zone us-west1-c
 ```
 
 
-## Setup resources
+### Create/select project
 
 Configure:
 - Create a new project in your google cloud console
@@ -34,20 +49,31 @@ $ cd 1-infra
 1-infra$ vim terraform.tfvars
 ```
 
+
+## Start the resources
+
 Spin up:
 ```sh
 # In the root directory
 $ make apply
 ```
 
-Connect to the node:
+SSH to the controllers:
 ```sh
-$ gcloud compute ssh igor-learn-k8s-controller-0
+$ make ssh-controller-0
+$ make ssh-controller-1
+$ make ssh-controller-2
+```
+
+SSH to the workers:
+```sh
+$ make ssh-controller-0
+$ make ssh-controller-1
+$ make ssh-controller-2
 ```
 
 Spin down:
 ```sh
-# In the root directory
 $ make clean
 ```
 

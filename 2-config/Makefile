@@ -25,13 +25,13 @@ CONTROLLER_KUBECONFIGS = \
 	admin.kubeconfig
 
 
-KUBERNETES_REGION := $(shell echo "now" && gcloud config get-value compute/region)
+KUBERNETES_REGION := $(shell gcloud config get-value compute/region)
 KUBERNETES_PUBLIC_ADDRESS := $(shell gcloud compute addresses describe ${PREFIX}-kubernetes-the-hard-way --region ${KUBERNETES_REGION} --format 'value(address)')
 KUBERNETES_HOSTNAMES := "kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local"
 
 
 .PHONY: all
-all: upload-worker-keys upload-worker-kubeconfig upload-controller-keys upload-controller-kubeconfigs
+all: upload-worker-keys upload-worker-kubeconfig upload-controller-keys upload-controller-kubeconfigs upload-controller-encryption-configs
 
 .PHONY: clean
 clean:
@@ -238,3 +238,14 @@ upload-controller-kubeconfigs-%: ${CONTROLLER_KUBECONFIGS} $(COMPONENT_KUBECONFI
 
 .PHONY: upload-controller-kubeconfigs
 upload-controller-kubeconfigs: upload-controller-kubeconfigs-0 upload-controller-kubeconfigs-1 upload-controller-kubeconfigs-2
+
+encryption-config.yaml: bin/generate-encryption-key.sh
+	@ ${SHELL} bin/generate-encryption-key.sh
+
+.PHONY: upload-controller-encryption-key-%
+upload-controller-encryption-config-%: encryption-config.yaml
+	@ INSTANCE='controller-$*' ;\
+		gcloud compute scp encryption-config.yaml ${PREFIX}-$${INSTANCE}:~/
+
+.PHONY: upload-controller-encryption-config
+upload-controller-encryption-configs: upload-controller-encryption-config-0 upload-controller-encryption-config-1 upload-controller-encryption-config-2
