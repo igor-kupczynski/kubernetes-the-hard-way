@@ -77,3 +77,8 @@ Spin down:
 $ make clean
 ```
 
+## Go through the rest of the course
+
+My version of the labs (slightly changed versions, etc.):
+
+- [Bootstrapping the etcd Cluster](./7-etcd.sh)
