@@ -31,7 +31,7 @@ KUBERNETES_HOSTNAMES := "kubernetes,kubernetes.default,kubernetes.default.svc,ku
 
 
 .PHONY: all
-all: upload-worker-keys upload-worker-kubeconfig upload-controller-keys upload-controller-kubeconfigs upload-controller-encryption-configs
+all: upload-worker-keys upload-worker-kubeconfigs upload-controller-keys upload-controller-kubeconfigs upload-controller-encryption-configs
 
 .PHONY: clean
 clean:
@@ -173,16 +173,16 @@ worker-%.kubeconfig: $(WORKER_CERTIFICATES)
 		kubectl config set-context default \
 		    --cluster=kubernetes-the-hard-way \
 		    --user=system:kube-proxy \
-		    --kubeconfig=kube-proxy.kubeconfig ;\
-		kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+		    --kubeconfig=$${WORKER}.kubeconfig ;\
+		kubectl config use-context default --kubeconfig=$${WORKER}.kubeconfig
 
 .PHONY: upload-worker-kubeconfig-%
 upload-worker-kubeconfig-%: $(WORKER_KUBECONFIGS) ${COMPONENT_KUBECONFIGS}
 	@ INSTANCE='worker-$*' ;\
 		gcloud compute scp $${INSTANCE}.kubeconfig kube-proxy.kubeconfig ${PREFIX}-$${INSTANCE}:~/
 
-.PHONY: upload-worker-kubeconfig
-upload-worker-kubeconfig: upload-worker-kubeconfig-0 upload-worker-kubeconfig-1 upload-worker-kubeconfig-2
+.PHONY: upload-worker-kubeconfigs
+upload-worker-kubeconfigs: upload-worker-kubeconfig-0 upload-worker-kubeconfig-1 upload-worker-kubeconfig-2
 
 
 # === Controllers ===
