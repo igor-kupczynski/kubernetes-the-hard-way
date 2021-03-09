@@ -161,19 +161,19 @@ upload-worker-keys: upload-worker-keys-0 upload-worker-keys-1 upload-worker-keys
 worker-%.kubeconfig: $(WORKER_CERTIFICATES)
 	@ WORKER='worker-$*' ;\
 		kubectl config set-cluster kubernetes-the-hard-way \
-		    --certificate-authority=ca.pem \
-		    --embed-certs=true \
-		    --server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443 \
-		    --kubeconfig=$${WORKER}.kubeconfig ;\
+			--certificate-authority=ca.pem \
+			--embed-certs=true \
+			--server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443 \
+			--kubeconfig=$${WORKER}.kubeconfig ;\
 		kubectl config set-credentials system:node:$${WORKER} \
-		    --client-certificate=$${WORKER}.pem \
-		    --client-key=$${WORKER}-key.pem \
-		    --embed-certs=true \
-		    --kubeconfig=$${WORKER}.kubeconfig ;\
+			--client-certificate=$${WORKER}.pem \
+			--client-key=$${WORKER}-key.pem \
+			--embed-certs=true \
+			--kubeconfig=$${WORKER}.kubeconfig ;\
 		kubectl config set-context default \
-		    --cluster=kubernetes-the-hard-way \
-		    --user=system:kube-proxy \
-		    --kubeconfig=$${WORKER}.kubeconfig ;\
+			--cluster=kubernetes-the-hard-way \
+			--user=system:node:$${WORKER} \
+			--kubeconfig=$${WORKER}.kubeconfig ;\
 		kubectl config use-context default --kubeconfig=$${WORKER}.kubeconfig
 
 .PHONY: upload-worker-kubeconfig-%

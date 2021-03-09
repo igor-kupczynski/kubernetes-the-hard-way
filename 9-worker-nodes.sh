@@ -153,6 +153,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
   --container-runtime=remote \\
   --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
+  --hostname-override=${NODE_NAME} \\
   --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --network-plugin=cni \\
@@ -205,7 +206,4 @@ EOF
 # === Run from your workstation ===
 
 # Verify
-gcloud compute ssh igor-learn-k8s-controller-0 \
-  --command "kubectl get nodes --kubeconfig admin.kubeconfig"
-
-# https://github.com/kelseyhightower/kubernetes-the-hard-way/issues/439
+gcloud compute ssh igor-learn-k8s-controller-0 --command "kubectl get nodes --kubeconfig admin.kubeconfig"
