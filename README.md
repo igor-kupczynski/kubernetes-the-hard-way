@@ -81,5 +81,7 @@ $ make clean
 
 My version of the labs (slightly changed versions, etc.):
 
-- [Bootstrapping the etcd Cluster](./7-etcd.sh)
-- [Bootstrapping the Kubernetes Control Plane](./8-control-plane.sh)
+- [Bootstrapping the etcd cluster](./07-etcd.sh)
+- [Bootstrapping the Kubernetes control plane](./08-control-plane.sh)
+- [Bootstrapping the worker nodes](./09-worker-nodes.sh)
+- [Configure kubectl for local access](./10-confiugre-kubectl.sh)

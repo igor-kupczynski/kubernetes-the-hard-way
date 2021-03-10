@@ -31,12 +31,13 @@ KUBERNETES_HOSTNAMES := "kubernetes,kubernetes.default,kubernetes.default.svc,ku
 
 
 .PHONY: all
-all: upload-worker-keys upload-worker-kubeconfigs upload-controller-keys upload-controller-kubeconfigs upload-controller-encryption-configs
+all: upload-worker-keys upload-worker-kubeconfigs upload-controller-keys upload-controller-kubeconfigs upload-controller-encryption-configs client.kubeconfig
 
 .PHONY: clean
 clean:
 	@ rm -f *.csr
 	@ rm -f *.pem
+	@ rm -f *.kubeconfig
 
 
 # === CA ===
@@ -249,3 +250,21 @@ upload-controller-encryption-config-%: encryption-config.yaml
 
 .PHONY: upload-controller-encryption-config
 upload-controller-encryption-configs: upload-controller-encryption-config-0 upload-controller-encryption-config-1 upload-controller-encryption-config-2
+
+
+# === Kubectl ===
+client.kubeconfig: ${COMPONENT_CERTIFICATES}
+	kubectl config set-cluster kubernetes-the-hard-way \
+		--certificate-authority=ca.pem \
+		--embed-certs=true \
+		--server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443 \
+		--kubeconfig=client.kubeconfig ;\
+	kubectl config set-credentials admin \
+		--client-certificate=admin.pem \
+		--client-key=admin-key.pem \
+		--kubeconfig=client.kubeconfig ;\
+	kubectl config set-context kubernetes-the-hard-way \
+		--cluster=kubernetes-the-hard-way \
+		--user=admin \
+		--kubeconfig=client.kubeconfig ;\
+	kubectl config use-context kubernetes-the-hard-way --kubeconfig=client.kubeconfig
