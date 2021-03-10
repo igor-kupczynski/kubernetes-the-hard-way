@@ -44,8 +44,11 @@ sudo mkdir -p \
 }
 
 # Configure CNI networking
-export POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cird)  # `pod-cird` is not a typo
+{
+  export POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
+    http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr)
+  echo $POD_CIDR
+}
 
 cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
 {

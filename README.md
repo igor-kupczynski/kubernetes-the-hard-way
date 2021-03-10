@@ -2,7 +2,7 @@
 
 Scripts and resources to play with Kelsey Hightower's [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
-Running the Makefile will get you through to the step 06:
+Running the Makefile will get you through some of the steps:
 ```
 01-prerequisites.md
 02-client-tools.md
@@ -10,6 +10,8 @@ Running the Makefile will get you through to the step 06:
 04-certificate-authority.md
 05-kubernetes-configuration-files.md
 06-data-encryption-keys.md
+
+11-pod-network-routes.md
 ```
 
 TODO:

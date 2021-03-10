@@ -86,35 +86,3 @@ resource "google_compute_instance" "controller" {
     ]
   }
 }
-
-resource "google_compute_instance" "worker" {
-  count = "3"
-
-  name         = "${var.prefix}-worker-${count.index}"
-  machine_type = "e2-standard-2"
-
-  tags = ["kubernetes-the-hard-way", "worker"]
-
-  boot_disk {
-    initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2004-lts"
-      size  = 200
-    }
-  }
-
-  network_interface {
-    subnetwork = google_compute_subnetwork.kubernetes.id
-    network_ip = "10.240.0.2${count.index}"
-    access_config {}
-  }
-
-  service_account {
-    scopes = [
-      "compute-rw", "storage-ro", "service-management", "service-control", "logging-write", "monitoring"
-    ]
-  }
-
-  metadata = {
-    "pod-cird" = "10.240.0.2${count.index}"
-  }
-}
