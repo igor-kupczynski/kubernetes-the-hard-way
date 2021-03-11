@@ -1,10 +1,10 @@
 resource "google_compute_instance" "worker" {
   count = "3"
 
-  name         = "${var.prefix}-worker-${count.index}"
-  machine_type = "e2-standard-2"
+  name      = "${var.prefix}-worker-${count.index}"
+  tags      = ["kubernetes-the-hard-way", "worker"]
 
-  tags = ["kubernetes-the-hard-way", "worker"]
+  machine_type = "e2-standard-2"
 
   boot_disk {
     initialize_params {
@@ -35,7 +35,7 @@ resource "google_compute_route" "kubernetes-worker-cidr-route" {
 
   name = "${var.prefix}-kubernetes-route-10-200-${count.index}-0-24"
 
-  network     = google_compute_network.kubernetes-the-hard-way.id
+  network = google_compute_network.kubernetes-the-hard-way.id
 
   # TODO: read from worker.*
   next_hop_ip = "10.240.0.2${count.index}"

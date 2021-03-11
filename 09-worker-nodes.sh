@@ -1,4 +1,16 @@
 # === Run on ALL the controller nodes ===
+export NODE_NAME=$(hostname -s | awk -F '-' '{ print "worker-"$(NF)}'); echo $NODE_NAME
+
+# Configure internal routing
+{
+  echo "127.0.0.1 ${NODE_NAME}" | sudo tee -a /etc/hosts
+  echo "10.240.0.20 worker-0" | sudo tee -a /etc/hosts
+  echo "10.240.0.21 worker-1" | sudo tee -a /etc/hosts
+  echo "10.240.0.22 worker-2" | sudo tee -a /etc/hosts
+  echo "10.240.0.10 controller-0" | sudo tee -a /etc/hosts
+  echo "10.240.0.11 controller-1" | sudo tee -a /etc/hosts
+  echo "10.240.0.12 controller-2" | sudo tee -a /etc/hosts
+}
 
 # Prepare the nodes
 {
@@ -34,7 +46,7 @@ sudo mkdir -p \
 
 {
   mkdir containerd
-  tar -xvf "crictl-${CRI_VER}-linux-arm64.tar.gz"
+  tar -xvf "crictl-${CRI_VER}-linux-amd64.tar.gz"
   tar -xvf "containerd-${CONTAINERD_VER}-linux-amd64.tar.gz" -C containerd
   sudo tar -xvf "cni-plugins-linux-amd64-${CNI_VER}.tgz" -C /opt/cni/bin/
   sudo mv runc.amd64 runc
@@ -114,8 +126,6 @@ EOF
 
 
 # Configure the Kubelet
-export NODE_NAME=$(hostname -s | awk -F '-' '{ print "worker-"$(NF)}')
-
 {
   sudo mv ${NODE_NAME}-key.pem ${NODE_NAME}.pem /var/lib/kubelet/
   sudo mv ${NODE_NAME}.kubeconfig /var/lib/kubelet/kubeconfig

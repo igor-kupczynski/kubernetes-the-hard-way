@@ -1,5 +1,18 @@
 # === Run on ALL the controller nodes ===
 
+export NODE_NAME=$(hostname -s | awk -F '-' '{ print "controller-"$(NF)}'); echo $NODE_NAME
+
+# Configure internal routing
+{
+  echo "127.0.0.1 ${NODE_NAME}" | sudo tee -a /etc/hosts
+  echo "10.240.0.20 worker-0" | sudo tee -a /etc/hosts
+  echo "10.240.0.21 worker-1" | sudo tee -a /etc/hosts
+  echo "10.240.0.22 worker-2" | sudo tee -a /etc/hosts
+  echo "10.240.0.10 controller-0" | sudo tee -a /etc/hosts
+  echo "10.240.0.11 controller-1" | sudo tee -a /etc/hosts
+  echo "10.240.0.12 controller-2" | sudo tee -a /etc/hosts
+}
+
 # Download and install binaries
 export K8S_VER="v1.20.4"
 
