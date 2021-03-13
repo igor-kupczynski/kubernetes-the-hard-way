@@ -87,3 +87,4 @@ My version of the labs (slightly changed versions, etc.):
 - [Bootstrapping the Kubernetes control plane](./08-control-plane.sh)
 - [Bootstrapping the worker nodes](./09-worker-nodes.sh)
 - [Configure kubectl for local access](./10-confiugre-kubectl.sh)
+- [Deploy CoreDNS](./12-deploy-coredns.sh)
