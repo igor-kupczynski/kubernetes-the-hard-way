@@ -12,6 +12,7 @@ Running the Makefile will get you through some of the steps:
 06-data-encryption-keys.md
 
 11-pod-network-routes.md
+14-cleanup.md
 ```
 
 TODO:
